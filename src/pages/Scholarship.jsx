@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { scholarshipSchema, STEP_FIELDS } from "@/schemas/scholarshipSchema";
+import emailjs from "@emailjs/browser";
 import { Upload, Check } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
 
@@ -24,6 +25,8 @@ const NIGERIAN_STATES = [
 const Scholarship = () => {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState(null);
 
   const {
     register,
@@ -56,9 +59,59 @@ const Scholarship = () => {
 
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
-  const onSubmit = (data) => {
-    console.log("Scholarship submission:", data);
-    setSubmitted(true);
+  const onSubmit = async (data) => {
+    setSending(true);
+    setSendError(null);
+
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_SCHOLARSHIP_TEMPLATE_ID,
+        {
+          // Personal
+          first_name: data.firstName,
+          last_name: data.lastName,
+          middle_name: data.middleName || "",
+          phone: data.phone,
+          gender: data.gender,
+          dob: data.dob,
+          home_address: data.homeAddress,
+          lga: data.localGov,
+          state: data.stateOrigin,
+          country: data.country,
+          // Academic
+          institution: data.institution,
+          course: data.courseStudy,
+          year_level: data.yearLevel,
+          matric: data.matric,
+          cgpa: data.cgpa,
+          transcript: data.fileName,
+          // Financial
+          financial_need: data.financialNeed,
+          other_assistance: data.appliedOther,
+          personal_statement: data.personalStatement,
+          // Leadership
+          leadership: data.leadership,
+          community_impact: data.communityImpact,
+          ref_name: data.refFullName,
+          ref_relationship: data.refRelationship,
+          ref_org: data.refOrganization,
+          ref_phone: data.refPhone,
+          ref_email: data.refEmail,
+          // Declaration
+          media_consent: data.mediaConsent,
+          signature: data.confirmName,
+          sign_date: data.date,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      setSubmitted(true);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setSendError("Submission failed. Please try again or contact us directly.");
+    } finally {
+      setSending(false);
+    }
   };
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -97,11 +150,10 @@ const Scholarship = () => {
             <div className="flex justify-between mt-6">
               {STEPS.map((s) => (
                 <div key={s.id} className="flex flex-col items-center gap-2 flex-1">
-                  <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-                    step > s.id   ? "bg-primary text-primary-foreground" :
+                  <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${step > s.id ? "bg-primary text-primary-foreground" :
                     step === s.id ? "bg-primary text-primary-foreground ring-4 ring-primary/20" :
-                                    "bg-border text-muted-foreground"
-                  }`}>
+                      "bg-border text-muted-foreground"
+                    }`}>
                     {step > s.id ? <Check size={14} /> : s.id}
                   </div>
                   <span className={`text-xs ${step === s.id ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
@@ -382,12 +434,18 @@ const Scholarship = () => {
                     Next
                   </button>
                 ) : (
-                  <button
-                    type="submit"
-                    className="rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-                  >
-                    Submit Application
-                  </button>
+                  <div className="flex flex-col items-end gap-2">
+                    {sendError && (
+                      <p className="text-xs text-red-500">{sendError}</p>
+                    )}
+                    <button
+                      type="submit"
+                      disabled={sending}
+                      className="rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-60"
+                    >
+                      {sending ? "Submitting…" : "Submit Application"}
+                    </button>
+                  </div>
                 )}
               </div>
             </form>

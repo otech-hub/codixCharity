@@ -1,17 +1,41 @@
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 import { Phone, Mail, MapPin } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
 
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(null);
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", message: "" });
 
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.firstName.trim() || !form.email.trim() || !form.message.trim()) return;
-    setSubmitted(true);
+
+    setSending(true);
+    setError(null);
+
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID,
+        {
+          from_name: `${form.firstName} ${form.lastName}`.trim(),
+          from_email: form.email,
+          message: form.message,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      setSubmitted(true);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setError("Something went wrong. Please try again or email us directly.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -116,8 +140,15 @@ const Contact = () => {
                     className="w-full rounded-md border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                   />
                 </div>
-                <button type="submit" className="w-full rounded-md bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-90 transition-opacity">
-                  Send Message
+                {error && (
+                  <p className="text-sm text-red-500 text-center">{error}</p>
+                )}
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="w-full rounded-md bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-90 transition-opacity disabled:opacity-60"
+                >
+                  {sending ? "Sending…" : "Send Message"}
                 </button>
               </form>
             </>
