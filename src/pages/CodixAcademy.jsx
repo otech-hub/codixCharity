@@ -3,6 +3,8 @@ import { useState } from "react";
 import SectionTag from "@/components/SectionTag";
 import Precious from "@/assets/Precious.jpg";
 import heroImage4 from "@/assets/heroImage4.jpg";
+import heroImage1 from "@/assets/heroImage1.png";
+import mentoringImage from "@/assets/MentoringImage.jpg";
 
 const timeline = [
   {
@@ -87,22 +89,28 @@ const CodixAcademy = () => {
 
       <section className="container py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <img
+            src={heroImage1}
+            alt="Academy lab session"
+            className="w-full h-80"
+            loading="lazy"
+          />
           <div>
             <SectionTag>The How</SectionTag>
             <h2 className="text-3xl font-heading font-bold mb-6">
               Our Academic Partnership
             </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              In line with this commitment, Codix has also formalized a
+              Memorandum of Understanding with Olabisi Onabanjo University to
+              develop courses in the fields of biosensors, and nanotechnology.
+              The core objective of this collaboration is to facilitate skill
+              development among undergraduate students, ensuring exposure to the
+              latest advancements in these specialized fields. Through hands-on
+              training, students acquire practical skills directly applicable to
+              the dynamic landscape of healthcare.
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            In line with this commitment, Codix has also formalized a Memorandum
-            of Understanding with Olabisi Onabanjo University to develop courses
-            in the fields of biosensors, and nanotechnology. The core objective
-            of this collaboration is to facilitate skill development among
-            undergraduate students, ensuring exposure to the latest advancements
-            in these specialized fields. Through hands-on training, students
-            acquire practical skills directly applicable to the dynamic
-            landscape of healthcare.
-          </p>
         </div>
       </section>
 
@@ -136,9 +144,13 @@ const CodixAcademy = () => {
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-xs font-semibold tracking-widest uppercase text-[#3D8C54] mb-2">THE RECORDS</p>
+              <p className="text-xs font-semibold tracking-widest uppercase text-[#3D8C54] mb-2">
+                THE RECORDS
+              </p>
               <h2 className="text-4xl md:text-5xl font-heading font-bold text-white leading-tight">
-                Our Journey &amp;<br />Success
+                Our Journey &amp;
+                <br />
+                Success
               </h2>
             </div>
             <div>
@@ -167,7 +179,9 @@ const CodixAcademy = () => {
                       )}
                     </div>
                     {/* Content */}
-                    <div className={`${index !== timeline.length - 1 ? 'pb-10' : ''}`}>
+                    <div
+                      className={`${index !== timeline.length - 1 ? "pb-10" : ""}`}
+                    >
                       <h3 className="font-heading font-bold text-lg text-white mb-2">
                         {t.title}
                       </h3>

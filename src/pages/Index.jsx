@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
-import heroImage1 from "@/assets/heroImage1.png";
-import heroImage2 from "@/assets/heroImage2.jpg";
-import heroImage3 from "@/assets/heroImage3.jpg";
 import accomplishments from "@/assets/accomplishmentImage.jpg";
 import imoleayoTestimonial from "@/assets/imoleayoTestimonial.jpg";
+import KasarachiTestimonial from "@/assets/kasarachiTestimonial.jpg";
+import preciousTestimonial from "@/assets/preciousTestimonial.jpg";
+import { carouselImage } from "@/lib/data";
+import {
+  CarouselItem,
+  Carousel,
+  CarouselContent,
+} from "@/components/ui/carousel";
+import AutoScroll from "embla-carousel-auto-scroll";
+import React, { useEffect, useState, useRef } from "react";
 
 const pillars = [
   {
@@ -55,34 +62,63 @@ const testimonials = [
     name: "Precious Akinyemi",
     role: "Graduate of Industrial Chemistry",
     stars: 5,
-    img: { imoleayoTestimonial },
+    img: preciousTestimonial,
   },
   {
     text: "Taking the Biosensors and Nanotechnology course helped me see how biosensors and nanotechnology actually work in real products.",
     name: "Kasarachi Moku",
     role: "Graduate of Industrial Chemistry",
     stars: 4.5,
+    img: KasarachiTestimonial,
   },
   {
     text: "Taking the Biosensors & Nanotechnology course as a final-year student at OOU genuinely shaped how I think about modern diagnostics and pharmaceutical innovation.",
     name: "Imoleayo Solaja",
     role: "Graduate of Industrial Chemistry",
     stars: 4,
+    img: imoleayoTestimonial,
   },
 ];
 
 const Index = () => {
+  const [emblaApi, setEmblaApi] = useState();
+
+  const plugin = useRef(
+    AutoScroll({
+      speed: 1.5,
+      stopOnInteraction: false,
+      stopOnMouseEnter: false,
+    }),
+  );
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const timer = setTimeout(() => {
+      api.reInt();
+    }, 150);
+
+    return () => clearTimeout(timer);
+  }, [emblaApi]);
+
   return (
     <div>
+      <style>{`
+        .continuous-marquee [data-embla-container],
+        .continuous-marquee .flex {
+          transition-timing-function: linear !important;
+        }
+      `}</style>
       {/* Hero */}
-      <section className="container py-16 md:py-24 text-center">
+      <section className="container py-16 mt-10 md:py-24 text-center">
         <p className="text-sm text-primary font-medium mb-4">
           Established 2026 • Lagos, Nigeria
         </p>
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6">
-          Health &amp; Education
-          <br />
-          <span className="text-primary">Transforms</span> Communities
+          <span className="text-primary">
+            Transforming <br />{" "}
+          </span>{" "}
+          People &amp; Communities
         </h1>
         <p className="max-w-xl mx-auto text-muted-foreground mb-8">
           Codix Charity Foundation builds stronger healthcare systems and
@@ -91,19 +127,49 @@ const Index = () => {
         </p>
         <div className="flex gap-4 justify-center mb-12">
           <Link
-            to="/contact"
+            to="/our-work"
             className="inline-flex items-center justify-center rounded-lg bg-black px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
           >
-            Apply Now
+            Our Work
           </Link>
           <Link
-            to="/about"
+            to="/scholarship"
             className="inline-flex items-center justify-center rounded-lg border border-foreground px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
           >
-            Learn More
+            Scholarship
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+
+        {/* Image carousel */}
+        <Carousel
+          setApi={setEmblaApi}
+          opts={{
+            loop: true,
+            align: "start",
+            duration: 0,
+            watchResize: true,
+          }}
+          plugins={[plugin.current]}
+          className="absolute left-0 right-0 w-full continuous-marquee mt-10"
+        >
+          <CarouselContent>
+            {carouselImage.map((img, index) => (
+              <CarouselItem
+                key={index}
+                className="basis-1/2 md:basis-1/3 lg:basis-1/4"
+              >
+                <div className="p-1">
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="rounded-2xl w-full h-60 object-cover"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
           <img
             src={heroImage1}
             alt="Lab training"
@@ -127,12 +193,12 @@ const Index = () => {
             width={800}
             height={600}
           />
-        </div>
+        </div> */}
       </section>
 
       {/* Pillars */}
-      <section className="bg-secondary py-20">
-        <div className="container text-center">
+      <section className="bg-secondary py-20 mt-40">
+        <div className="container text-center pt-5">
           <SectionTag>Our Focus</SectionTag>
           <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
             The Pillars that Guide our Work
@@ -158,7 +224,7 @@ const Index = () => {
       </section>
 
       {/* Accomplishments */}
-      <section className="container py-20">
+      {/* <section className="container py-20">
         <div className="text-center mb-12">
           <SectionTag>Impact</SectionTag>
           <h2 className="text-3xl md:text-4xl font-heading font-bold">
@@ -191,7 +257,7 @@ const Index = () => {
             height={600}
           />
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonials */}
       <section className="bg-[#0E3074] py-40">
@@ -242,13 +308,12 @@ const Index = () => {
       </section>
 
       {/* CTA */}
-      <section className="container py-20 text-center">
+      <section className="container py-20 text-center bg-green-200 my-20 rounded-lg">
         <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
           Ready to join us
         </h2>
         <p className="text-muted-foreground max-w-md mx-auto mb-8">
-          Apply for scholarships, enroll in Codix Academy, or connect with a
-          mentor.
+          Stay updated Stay up to date on our programs, events, and more.
         </p>
         <div className="flex gap-3 justify-center max-w-md mx-auto">
           <input

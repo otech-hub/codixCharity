@@ -42,6 +42,7 @@ export const scholarshipSchema = z.object({
   mediaConsent: z.string().min(1, "Please select a media consent option"),
   confirmName:  z.string().min(1, "Signature is required"),
   date:         z.string().min(1, "Date is required"),
+  notRobot:     z.literal(true, { errorMap: () => ({ message: "Please confirm you are not a robot" }) }),
 });
 
 // Fields validated on each step's "Next" click
@@ -50,7 +51,7 @@ export const STEP_FIELDS = {
   2: ["institution", "courseStudy", "yearLevel", "matric", "cgpa", "fileName"],
   3: ["financialNeed", "appliedOther", "personalStatement"],
   4: ["leadership", "communityImpact", "refFullName", "refRelationship", "refOrganization", "refPhone", "refEmail"],
-  5: ["trueInfo", "understand", "mediaConsent", "confirmName", "date"],
+  5: ["trueInfo", "understand", "mediaConsent", "confirmName", "date", "notRobot"],
 };
 
 // Legacy per-step exports (kept for backwards compatibility)
@@ -69,6 +70,6 @@ export const step4Schema = scholarshipSchema.pick({
   refRelationship: true, refOrganization: true, refPhone: true, refEmail: true,
 });
 export const step5Schema = scholarshipSchema.pick({
-  trueInfo: true, understand: true, mediaConsent: true, confirmName: true, date: true,
+  trueInfo: true, understand: true, mediaConsent: true, confirmName: true, date: true, notRobot: true,
 });
 export const stepSchemas = [step1Schema, step2Schema, step3Schema, step4Schema, step5Schema];

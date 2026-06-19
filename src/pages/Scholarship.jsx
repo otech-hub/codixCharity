@@ -41,7 +41,7 @@ const Scholarship = () => {
       financialNeed: "", appliedOther: "", personalStatement: "",
       leadership: "", communityImpact: "",
       refFullName: "", refRelationship: "", refOrganization: "", refEmail: "", refPhone: "",
-      trueInfo: false, understand: false, mediaConsent: "", confirmName: "", date: "",
+      trueInfo: false, understand: false, mediaConsent: "", confirmName: "", date: "", notRobot: false,
     },
     mode: "onTouched",
   });
@@ -359,6 +359,11 @@ const Scholarship = () => {
                       <input {...register("date")} type="date" className={inputCls("date")} />
                       <Err field="date" />
                     </div>
+                    <div className="flex items-start gap-3">
+                      <input type="checkbox" {...register("notRobot")} className="mt-1 h-4 w-4 rounded border-border text-primary focus:ring-primary" />
+                      <label className="text-sm">I am not a robot</label>
+                    </div>
+                    <Err field="notRobot" />
                   </div>
                 </div>
               )}
