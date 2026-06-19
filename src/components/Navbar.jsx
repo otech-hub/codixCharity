@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/codixLogo.jpeg";
 
 const navLinks = [
   { label: "Home", to: "/" },
   { label: "About CCF", to: "/about" },
   { label: "Our Work", to: "/our-work" },
   { label: "Codix Academy", to: "/codix-academy" },
-  { label: "Scholarship", to: "/scholarship" },
+  // { label: "Scholarship", to: "/scholarship" },
   { label: "Mentoring", to: "/mentoring" },
   { label: "Contact", to: "/contact" },
 ];
@@ -21,7 +21,11 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 bg-background border-b border-border">
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="Codix Charity Foundation" className="h-8 w-auto" />
+          <img
+            src={logo}
+            alt="Codix Charity Foundation"
+            className="h-8 w-auto"
+          />
         </Link>
 
         <div className="hidden lg:flex items-center gap-8">

@@ -1,8 +1,10 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import SectionTag from "@/components/SectionTag";
-import accomplishments from "@/assets/accomplishments.jpg";
+import Precious from "@/assets/Precious.jpg";
+import heroImage4 from "@/assets/heroImage4.jpg";
 import heroImage1 from "@/assets/heroImage1.png";
+import mentoringImage from "@/assets/MentoringImage.jpg";
 
 const timeline = [
   {
@@ -74,7 +76,7 @@ const CodixAcademy = () => {
               </p>
             </div>
             <img
-              src={heroImage1}
+              src={heroImage4}
               alt="Academy lab session"
               className="rounded-lg w-full h-80 object-cover"
               loading="lazy"
@@ -87,22 +89,28 @@ const CodixAcademy = () => {
 
       <section className="container py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <img
+            src={heroImage1}
+            alt="Academy lab session"
+            className="w-full h-80"
+            loading="lazy"
+          />
           <div>
             <SectionTag>The How</SectionTag>
             <h2 className="text-3xl font-heading font-bold mb-6">
               Our Academic Partnership
             </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              In line with this commitment, Codix has also formalized a
+              Memorandum of Understanding with Olabisi Onabanjo University to
+              develop courses in the fields of biosensors, and nanotechnology.
+              The core objective of this collaboration is to facilitate skill
+              development among undergraduate students, ensuring exposure to the
+              latest advancements in these specialized fields. Through hands-on
+              training, students acquire practical skills directly applicable to
+              the dynamic landscape of healthcare.
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            In line with this commitment, Codix has also formalized a Memorandum
-            of Understanding with Olabisi Onabanjo University to develop courses
-            in the fields of biosensors, and nanotechnology. The core objective
-            of this collaboration is to facilitate skill development among
-            undergraduate students, ensuring exposure to the latest advancements
-            in these specialized fields. Through hands-on training, students
-            acquire practical skills directly applicable to the dynamic
-            landscape of healthcare.
-          </p>
         </div>
       </section>
 
@@ -134,15 +142,19 @@ const CodixAcademy = () => {
 
       <section className="bg-navy py-20">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <SectionTag>The Records</SectionTag>
-              <h2 className="text-3xl font-heading font-bold text-navy-foreground">
-                Our Journey &amp; Success
+              <p className="text-xs font-semibold tracking-widest uppercase text-[#3D8C54] mb-2">
+                THE RECORDS
+              </p>
+              <h2 className="text-4xl md:text-5xl font-heading font-bold text-white leading-tight">
+                Our Journey &amp;
+                <br />
+                Success
               </h2>
             </div>
             <div>
-              <p className="text-sm text-navy-foreground/70 mb-8">
+              <p className="text-sm text-white/90 mb-12 leading-relaxed">
                 Launched in 2024, the programme welcomed its first cohort that
                 same year and has since grown to its third cohort. As of October
                 2025, over 400 students have graduated, building a strong
@@ -150,20 +162,30 @@ const CodixAcademy = () => {
                 contribute meaningfully to modern diagnostics and healthcare
                 delivery in Nigeria.
               </p>
-              <div className="space-y-8">
-                {timeline.map((t) => (
-                  <div key={t.year} className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <span className="text-sm font-medium text-navy-foreground/60 min-w-[80px] text-right">
+              <div className="space-y-0">
+                {timeline.map((t, index) => (
+                  <div key={t.year} className="flex gap-6">
+                    {/* Year */}
+                    <div className="w-[80px] shrink-0 text-right py-0.5">
+                      <span className="text-sm font-semibold text-white">
                         {t.year}
                       </span>
                     </div>
-                    <div className="w-3 h-3 rounded-full bg-accent mt-1 shrink-0" />
-                    <div>
-                      <h3 className="font-heading font-semibold text-navy-foreground">
+                    {/* Axis */}
+                    <div className="relative flex flex-col items-center">
+                      <div className="w-5 h-5 rounded-full bg-white border-[3px] border-[#3D8C54] z-10 shrink-0" />
+                      {index !== timeline.length - 1 && (
+                        <div className="w-[2px] bg-[#3D8C54] h-full absolute top-5" />
+                      )}
+                    </div>
+                    {/* Content */}
+                    <div
+                      className={`${index !== timeline.length - 1 ? "pb-10" : ""}`}
+                    >
+                      <h3 className="font-heading font-bold text-lg text-white mb-2">
                         {t.title}
                       </h3>
-                      <p className="text-sm text-navy-foreground/60">
+                      <p className="text-sm text-white/80 leading-relaxed">
                         {t.desc}
                       </p>
                     </div>
@@ -190,12 +212,12 @@ const CodixAcademy = () => {
           </button>
           <div className="flex gap-6 items-start">
             <img
-              src={accomplishments}
+              src={Precious}
               alt={voice.name}
               className="w-40 h-48 rounded-lg object-cover shrink-0 hidden md:block"
               loading="lazy"
-              width={800}
-              height={600}
+              width={200}
+              height={400}
             />
             <div className="text-left">
               <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line mb-6">

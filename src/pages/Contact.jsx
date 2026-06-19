@@ -4,6 +4,8 @@ import SectionTag from "@/components/SectionTag";
 
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [humanCheck, setHumanCheck] = useState(false);
+  const [robotError, setRobotError] = useState("");
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", message: "" });
 
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
@@ -11,6 +13,10 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.firstName.trim() || !form.email.trim() || !form.message.trim()) return;
+    if (!humanCheck) {
+      setRobotError("Please confirm you are not a robot.");
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -116,6 +122,19 @@ const Contact = () => {
                     className="w-full rounded-md border border-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                   />
                 </div>
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={humanCheck}
+                    onChange={(e) => {
+                      setHumanCheck(e.target.checked);
+                      if (e.target.checked) setRobotError("");
+                    }}
+                    className="mt-1 h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                  />
+                  <label className="text-sm">I am not a robot</label>
+                </div>
+                {robotError && <p className="text-xs text-red-500">{robotError}</p>}
                 <button type="submit" className="w-full rounded-md bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-90 transition-opacity">
                   Send Message
                 </button>

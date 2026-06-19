@@ -69,3 +69,9 @@
     @apply font-heading;
   }
 }
+
+/* Carousel embla calculate */
+.continuous-marquee [data-embla-container],
+.continuous-marquee .flex {
+  transition-timing-function: linear !important;
+}
