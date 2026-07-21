@@ -132,6 +132,12 @@ const Scholarship = () => {
     setSendError(null);
 
     try {
+      if (!data.resume || !(data.resume instanceof File)) {
+        throw new Error(
+          "Please upload your academic transcript before submitting.",
+        );
+      }
+
       const resumeConvert = await convertToBase(data.resume);
       const payload = {
         ...data,
