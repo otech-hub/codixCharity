@@ -13,7 +13,7 @@ const formatValue = (value) => {
 
 const buildEmailHtml = (formData) => {
   const rows = Object.entries(formData)
-    .filter(([key]) => key !== "resumeBase64" && key !== "resumeName")
+    .filter(([key]) => key !== "resume" && key !== "filename")
     .map(
       ([key, value]) =>
         `<li><strong>${key}:</strong> ${formatValue(value)}</li>`,
@@ -48,8 +48,8 @@ export default async function handler(req, res) {
     const formData = req.body ?? {};
     const { firstName, lastName } = formData;
 
-    const resumeBase64 = formData.resumeBase64;
-    const resumeName = formData.resumeName;
+    const resumeBase64 = formData.resume;
+    const resumeName = formData.filename;
 
     const attachments = [];
     if (resumeBase64 && resumeName) {

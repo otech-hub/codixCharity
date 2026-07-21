@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { scholarshipSchema, STEP_FIELDS } from "@/schemas/scholarshipSchema";
 import { Upload, Check } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
-import { convertToBase, normalizeTranscriptFile } from "@/lib/convertBase";
+import { convertToBase } from "@/lib/convertBase";
 
 const STEPS = [
   { id: 1, label: "Personal" },
@@ -59,6 +59,9 @@ const Scholarship = () => {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState(null);
+  const [resume, setResume] = useState(null);
+  const [resumeName, setResumeName] = useState("");
+  const [resumeError, setResumeError] = useState("");
 
   const {
     register,
@@ -109,7 +112,6 @@ const Scholarship = () => {
   });
 
   const firstName = watch("firstName");
-  const fileName = watch("fileName");
 
   const next = async () => {
     const valid = await trigger(STEP_FIELDS[step]);
@@ -120,13 +122,27 @@ const Scholarship = () => {
 
   const handleTranscriptUpload = (event) => {
     const file = event.target.files?.[0];
-    if (!file) return;
 
-    setValue("resume", file, { shouldValidate: true, shouldDirty: true });
-    setValue("fileName", file.name, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
+    if (!file) {
+      setResume(null);
+      setResumeName("");
+      setResumeError("Please upload your academic transcript.");
+      return;
+    }
+
+    if (
+      file.type !== "application/pdf" &&
+      !file.name.toLowerCase().endsWith(".pdf")
+    ) {
+      setResume(null);
+      setResumeName("");
+      setResumeError("Please upload a PDF document.");
+      return;
+    }
+
+    setResume(file);
+    setResumeName(file.name);
+    setResumeError("");
   };
 
   const onSubmit = async (data) => {
@@ -134,22 +150,19 @@ const Scholarship = () => {
     setSendError(null);
 
     try {
-      const selectedResume = normalizeTranscriptFile(data.resume);
-
-      if (!selectedResume) {
+      if (!resume) {
+        setResumeError("Please upload your academic transcript.");
         throw new Error(
           "Please upload your academic transcript before submitting.",
         );
       }
 
-      const resumeConvert = await convertToBase(selectedResume);
+      const resumeConvert = await convertToBase(resume);
       const payload = {
         ...data,
-        fileName: selectedResume.name ?? data.fileName,
-        resumeBase64: resumeConvert,
-        resumeName: selectedResume.name ?? data.fileName,
+        resume: resumeConvert,
+        filename: resume.name,
       };
-      delete payload.resume;
 
       const response = await fetch("/api/email", {
         method: "POST",

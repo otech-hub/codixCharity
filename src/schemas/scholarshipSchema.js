@@ -23,7 +23,7 @@ export const scholarshipSchema = z.object({
     .min(1, "CGPA is required")
     .refine((v) => !isNaN(v), "CGPA must be a number")
     .refine((v) => Number(v) >= 0 && Number(v) <= 5, "CGPA must be between 0 and 5"),
-  fileName:     z.string().min(1, "Please upload your academic transcript"),
+  fileName:     z.string().optional(),
   // Step 3 – Financial
   financialNeed:     z.string().min(20, "Please provide more detail (at least 20 characters)"),
   appliedOther:      z.string().min(1, "Please select an option"),
@@ -48,7 +48,7 @@ export const scholarshipSchema = z.object({
 // Fields validated on each step's "Next" click
 export const STEP_FIELDS = {
   1: ["firstName", "lastName", "phone", "gender", "dob", "homeAddress", "localGov", "stateOrigin", "country"],
-  2: ["institution", "courseStudy", "yearLevel", "matric", "cgpa", "fileName"],
+  2: ["institution", "courseStudy", "yearLevel", "matric", "cgpa"],
   3: ["financialNeed", "appliedOther", "personalStatement"],
   4: ["leadership", "communityImpact", "refFullName", "refRelationship", "refOrganization", "refPhone", "refEmail"],
   5: ["trueInfo", "understand", "mediaConsent", "confirmName", "date", "notRobot"],
@@ -60,7 +60,7 @@ export const step1Schema = scholarshipSchema.pick({
   dob: true, homeAddress: true, localGov: true, stateOrigin: true, country: true,
 });
 export const step2Schema = scholarshipSchema.pick({
-  institution: true, courseStudy: true, yearLevel: true, matric: true, cgpa: true, fileName: true,
+  institution: true, courseStudy: true, yearLevel: true, matric: true, cgpa: true,
 });
 export const step3Schema = scholarshipSchema.pick({
   financialNeed: true, appliedOther: true, personalStatement: true,
