@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { scholarshipSchema, STEP_FIELDS } from "@/schemas/scholarshipSchema";
 import { Upload, Check } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
-import { convertToBase } from "@/lib/convertBase";
+import { convertToBase, normalizeTranscriptFile } from "@/lib/convertBase";
 
 const STEPS = [
   { id: 1, label: "Personal" },
@@ -132,18 +132,20 @@ const Scholarship = () => {
     setSendError(null);
 
     try {
-      if (!data.resume || !(data.resume instanceof File)) {
+      const selectedResume = normalizeTranscriptFile(data.resume);
+
+      if (!selectedResume) {
         throw new Error(
           "Please upload your academic transcript before submitting.",
         );
       }
 
-      const resumeConvert = await convertToBase(data.resume);
+      const resumeConvert = await convertToBase(selectedResume);
       const payload = {
         ...data,
-        fileName: data.resume?.name ?? data.fileName,
+        fileName: selectedResume.name ?? data.fileName,
         resumeBase64: resumeConvert,
-        resumeName: data.resume?.name ?? data.fileName,
+        resumeName: selectedResume.name ?? data.fileName,
       };
       delete payload.resume;
 

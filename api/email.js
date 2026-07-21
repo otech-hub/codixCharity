@@ -60,6 +60,7 @@ export default async function handler(req, res) {
       attachments.push({
         filename: resumeName,
         content: Buffer.from(base64Content, "base64"),
+        contentType: "application/pdf",
       });
     }
 
