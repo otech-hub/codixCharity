@@ -86,6 +86,7 @@ const Scholarship = () => {
       matric: "",
       cgpa: "",
       fileName: "",
+      resume: null,
       financialNeed: "",
       appliedOther: "",
       personalStatement: "",
@@ -104,6 +105,7 @@ const Scholarship = () => {
       notRobot: false,
     },
     mode: "onTouched",
+    shouldUnregister: false,
   });
 
   const firstName = watch("firstName");
@@ -458,7 +460,7 @@ const Scholarship = () => {
                       </span>
                       <input
                         type="file"
-                        {...register("resume")}
+                        name="resume"
                         accept=".pdf"
                         onChange={handleTranscriptUpload}
                       />

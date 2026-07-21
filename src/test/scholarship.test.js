@@ -17,4 +17,14 @@ describe("scholarship transcript upload", () => {
       "data:application/pdf;base64",
     );
   });
+
+  it("converts a direct File object payload into a base64 string", async () => {
+    const file = new File(["dummy pdf content"], "my_transcript.pdf", {
+      type: "application/pdf",
+    });
+
+    await expect(convertToBase(file)).resolves.toContain(
+      "data:application/pdf;base64",
+    );
+  });
 });
