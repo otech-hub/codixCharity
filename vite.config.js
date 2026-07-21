@@ -21,7 +21,9 @@ export default defineConfig(({ mode }) => ({
           if (req.method !== "POST") {
             res.statusCode = 405;
             res.setHeader("Content-Type", "application/json");
-            res.end(JSON.stringify({ success: false, message: "Wrong HTTP method" }));
+            res.end(
+              JSON.stringify({ success: false, message: "Wrong HTTP method" }),
+            );
             return;
           }
 
@@ -33,7 +35,11 @@ export default defineConfig(({ mode }) => ({
           req.on("end", async () => {
             try {
               const parsedBody = body ? JSON.parse(body) : {};
-              const mockReq = { method: req.method, body: parsedBody, headers: req.headers };
+              const mockReq = {
+                method: req.method,
+                body: parsedBody,
+                headers: req.headers,
+              };
               const mockRes = {
                 statusCode: 200,
                 status(code) {
@@ -58,7 +64,9 @@ export default defineConfig(({ mode }) => ({
             } catch (error) {
               res.statusCode = 500;
               res.setHeader("Content-Type", "application/json");
-              res.end(JSON.stringify({ success: false, message: error.message }));
+              res.end(
+                JSON.stringify({ success: false, message: error.message }),
+              );
             }
           });
         });
@@ -70,6 +78,13 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
+    dedupe: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "@tanstack/react-query",
+      "@tanstack/query-core",
+    ],
   },
 }));
