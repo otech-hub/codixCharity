@@ -66,7 +66,7 @@ export default async function handler(req, res) {
 
     await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "info@codixcharityfoundation.org",
-      to: process.env.RESEND_TO_EMAIL || "georgejoshuaayomiposi@gmail.com",
+      to: process.env.RESEND_TO_EMAIL || "info@codixcharityfoundation.org",
       subject:
         `Scholarship Form: ${firstName || "Applicant"} ${lastName || ""}`.trim(),
       html: buildEmailHtml(formData),
