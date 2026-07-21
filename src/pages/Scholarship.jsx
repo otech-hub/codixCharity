@@ -172,7 +172,14 @@ const Scholarship = () => {
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
+      const text = await response.text();
+      let result = {};
+
+      try {
+        result = text ? JSON.parse(text) : {};
+      } catch {
+        result = { success: false, message: text || "Submission failed" };
+      }
 
       if (!response.ok || !result.success) {
         throw new Error(result.message || "Submission failed");
@@ -462,14 +469,14 @@ const Scholarship = () => {
                       Upload most recent Academic Transcript*
                     </label>
                     <label
-                      className={`border-2 border-dashed rounded-md p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${e("fileName") ? "border-red-400" : "border-border hover:border-primary"}`}
+                      className={`border-2 border-dashed rounded-md p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${resumeError ? "border-red-400" : "border-border hover:border-primary"}`}
                     >
                       <Upload
                         className="text-muted-foreground mb-2"
                         size={24}
                       />
                       <span className="text-sm text-muted-foreground">
-                        {fileName || "Click to upload"}
+                        {resumeName || "Click to upload"}
                       </span>
                       <input
                         type="file"
@@ -478,7 +485,9 @@ const Scholarship = () => {
                         onChange={handleTranscriptUpload}
                       />
                     </label>
-                    <Err field="fileName" />
+                    {resumeError ? (
+                      <p className="text-xs text-red-500 mt-1">{resumeError}</p>
+                    ) : null}
                   </div>
                 </div>
               )}
