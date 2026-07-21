@@ -116,7 +116,16 @@ const Scholarship = () => {
 
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
-  const handleFile = () => {};
+  const handleTranscriptUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setValue("resume", file, { shouldValidate: true, shouldDirty: true });
+    setValue("fileName", file.name, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
 
   const onSubmit = async (data) => {
     setSending(true);
@@ -443,6 +452,7 @@ const Scholarship = () => {
                         type="file"
                         {...register("resume")}
                         accept=".pdf"
+                        onChange={handleTranscriptUpload}
                       />
                     </label>
                     <Err field="fileName" />
