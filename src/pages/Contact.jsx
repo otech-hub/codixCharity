@@ -51,7 +51,8 @@ const Contact = () => {
         message: "",
       });
     } catch (error) {
-      setError(error.message || "Something went wrong. Please try again");
+      console.log(error);
+      setError("Something went wrong. Please try again");
     } finally {
       setSending(false);
     }
