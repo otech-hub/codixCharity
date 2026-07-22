@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   try {
     const { data, error } = await resend.emails.send({
       from: "info@codixcharityfoundation.org",
-      to: "georgejoshuaayomiposi@gmail.com",
+      to: "info@codixcharityfoundation.org",
       subject: "Contact Us Response - CodixCharity",
       html: `
       <h2>New Contact Us Form</h2>
