@@ -43,6 +43,13 @@ const Contact = () => {
       }
 
       setSubmitted(true);
+
+      setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        message: "",
+      });
     } catch (error) {
       setError(error.message || "Something went wrong. Please try again");
     } finally {

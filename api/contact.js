@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -15,15 +16,15 @@ export default async function handler(req, res) {
 
   //   Use resend to send the message
   try {
-    const response = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: "info@codixcharityfoundation.org",
       to: "georgejoshuaayomiposi@gmail.com",
       subject: "Contact Us Response - CodixCharity",
       html: `
       <h2>New Contact Us Form</h2>
-      <p><strong>Name : </strong> ${firstName} ${lastName}</p>
-      <p><strong>Name : </strong> ${email}</p>
-      <p><strong>Name : </strong> ${message}</p>
+      <p><strong>Name: </strong> ${firstName} ${lastName}</p>
+      <p><strong>Email: </strong> ${email}</p>
+      <p><strong>Message: </strong> ${message}</p>
       `,
     });
 
@@ -31,12 +32,13 @@ export default async function handler(req, res) {
 
     if (error) {
       return res.status(400).json({
-        message: error.message || "Failed to send email via Resend",
+        message: error.message,
       });
     }
 
     return res.status(200).json({
       message: "Message sent successfully",
+      data,
     });
   } catch (error) {
     console.log(error);
