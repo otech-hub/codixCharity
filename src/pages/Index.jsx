@@ -127,6 +127,7 @@ const Index = () => {
               future leaders, strengthen healthcare systems, and inspire
               innovation.
             </p>
+            <br />
             <p className="text-sm text-muted-foreground leading-relaxed">
               As the social impact arm of Codix Pharma Ltd and the broader Codix
               Group, we work with communities, educational institutions,
@@ -137,6 +138,7 @@ const Index = () => {
               knowledge, opportunity, and access, they become catalysts for
               transforming society.
             </p>
+            <br />
             <p className="text-sm text-muted-foreground leading-relaxed">
               The stories we help create are our greatest measure of impact—and
               they are only just beginning.
