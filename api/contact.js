@@ -27,7 +27,13 @@ export default async function handler(req, res) {
       `,
     });
 
-    const data = await response.json();
+    // Handling Resend Error, incase it fails from resend
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message || "Failed to send email via Resend",
+      });
+    }
 
     return res.status(200).json({
       message: "Message sent successfully",
