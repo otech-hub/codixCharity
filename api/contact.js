@@ -3,7 +3,7 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
-  if (res.method !== "POST") {
+  if (req.method !== "POST") {
     return res.status(403).json({
       message: "Api Method is not allowed, use POST method",
     });
