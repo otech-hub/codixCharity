@@ -115,7 +115,7 @@ const Index = () => {
         </div>
       </section>
       <section className="container py-16 mt-10 md:py-24 text-center">
-        <div className="flex lg:flex-row sm:flex-col gap-6 mb-[80px]">
+        <div className="flex flex-col lg:flex-row  gap-6 mb-[80px]">
           <div className="lg:w-[50%] text-left">
             <h2 className="font-heading text-4xl font-bold mb-4">
               Creating Lasting Impact
@@ -124,8 +124,7 @@ const Index = () => {
               At Codix Charity Foundation, we believe that sustainable
               development begins by investing in people. Beyond providing
               support, we create opportunities that improve lives, nurture
-              future leaders, strengthen healthcare systems, and
-              iclassName="text-sm text-muted-foreground leading-relaxed"nspire
+              future leaders, strengthen healthcare systems, and inspire
               innovation.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -143,7 +142,7 @@ const Index = () => {
               they are only just beginning.
             </p>
           </div>
-          <div className="lg:w-[50%] px-5 sm:h-70">
+          <div className="lg:w-[50%] lg:px-5 sm:h-70">
             <iframe
               src={`https://www.youtube.com/embed/${videoId}`}
               frameborder="0"

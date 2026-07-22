@@ -36,10 +36,10 @@ const trustees = [
     alt: "Olumide Adeyileka",
   },
   {
-    name: "Mr. Jide Ozunkaya",
+    name: "Mr. Jide Ogunkoya",
     role: "Trustee",
     img: jide,
-    alt: "Jide Ozunkaya",
+    alt: "Jide Ogunkoya",
   },
   {
     name: "Barr. Dotun Oduwobi",
@@ -48,10 +48,10 @@ const trustees = [
     alt: "Dotun Oduwobi",
   },
   {
-    name: "Mr. Gbenga Daniel-Adelayo",
+    name: "Mr. Gbenga Daniel-Adebayo",
     role: "Trustee",
     img: gbenga,
-    alt: "Gbenga Daniel-Adelayo",
+    alt: "Gbenga Daniel-Adebayo",
   },
 ];
 

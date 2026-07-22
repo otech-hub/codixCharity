@@ -26,20 +26,25 @@ const Contact = () => {
     setError(null);
 
     try {
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID,
-        {
-          from_name: `${form.firstName} ${form.lastName}`.trim(),
-          from_email: form.email,
-          message: form.message,
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      );
+        body: JSON.stringify({
+          ...form,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to send message.");
+      }
+
       setSubmitted(true);
-    } catch (err) {
-      console.error("EmailJS error:", err);
-      setError("Something went wrong. Please try again or email us directly.");
+    } catch (error) {
+      setError(error.message || "Something went wrong. Please try again");
     } finally {
       setSending(false);
     }
