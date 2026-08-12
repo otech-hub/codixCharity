@@ -12,7 +12,7 @@ import colabImg7 from "../assets/colabImg7.jpg";
 import Precious from "../assets/Precious.jpg";
 import kasarachi from "../assets/kasarachiTestimonial.jpg";
 import heroImage4 from "../assets/heroImage4.jpg";
-import CodixAcademyHero from "../assets/codixAcademyHero.jpg";
+import CodixAcademyHero from "../assets/codixAcademyHero.webp";
 import { SEO } from "@/components/SEO";
 
 const timeline = [

@@ -2,7 +2,7 @@ import SectionTag from "@/components/SectionTag";
 import heroImage2 from "@/assets/heroImage2.jpg";
 import heroImage4 from "@/assets/heroImage3.jpg";
 import Mentoring from "@/assets/MentoringImage.jpg";
-import OurWorkHero from "../assets/OurWorkHero.jpg";
+import OurWorkHero from "../assets/OurWorkHero.webp";
 import { SEO } from "@/components/SEO";
 
 const statsGrid = [

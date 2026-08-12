@@ -1,6 +1,6 @@
 import SectionTag from "@/components/SectionTag";
 import mentoringImg from "@/assets/MentoringImage.jpg";
-import mentorHero from "../assets/mentorHero.jpg";
+import mentorHero from "../assets/mentorHero.webp";
 import { SEO } from "@/components/SEO";
 
 const Mentoring = () => (

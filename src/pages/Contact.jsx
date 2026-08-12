@@ -2,7 +2,7 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Phone, Mail, MapPin } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
-import contactHero from "../assets/contactHero.jpg";
+import contactHero from "../assets/contactHero.webp";
 import { SEO } from '../components/SEO'
 
 const Contact = () => {

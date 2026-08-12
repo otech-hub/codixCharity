@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
-import accomplishments from "@/assets/accomplishmentImage.jpg";
 import imoleayoTestimonial from "@/assets/imoleayoTestimonial.jpg";
 import KasarachiTestimonial from "@/assets/kasarachiTestimonial.jpg";
 import preciousTestimonial from "@/assets/preciousTestimonial.jpg";
@@ -13,7 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import AutoScroll from "embla-carousel-auto-scroll";
 import React, { useEffect, useState, useRef } from "react";
-import HomeHero from "../assets/HomeHero.jpg";
+import HomeHero from "../assets/HomeHero.webp";
 import { SEO } from "@/components/SEO";
 import { pillars } from "@/lib/pillars";
 
