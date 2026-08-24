@@ -92,7 +92,7 @@ const OurWork = () => {
       />
 
       <section
-        className="text-center h-screen"
+        className="text-center min-h-[75vh] md:min-h-[100vh] relative flex justify-center items-center"
         style={{
           backgroundImage: `url(${OurWorkHero})`,
           backgroundSize: "cover",
@@ -101,9 +101,12 @@ const OurWork = () => {
           marginBottom: "80px",
         }}
       >
-        <div className="bg-black opacity-70 w-full h-full py-16 md:py-24 flex flex-col justify-center items-center text-white">
-          <SectionTag variant="dark">Community Impact</SectionTag>
-          <h1 className="text-4xl md:text-5xl font-heading font-bold mt-4">
+        <div className=" text-white text-center h-full flex flex-col justify-center">
+          <div className="bg-black absolute inset-0 opacity-50 z-10"></div>
+          <p className="bg-black w-fit relative z-20 mx-auto px-4 py-1 shadow-lg rounded-full text-white opacity-80 border border-white text-xs font-bold">
+            OUR WORKS
+          </p>
+          <h1 className="text-4xl md:text-5xl relative z-20 font-heading font-bold mt-4">
             Our Work &amp; Initiatives
           </h1>
         </div>
@@ -151,10 +154,11 @@ const OurWork = () => {
           {pillars.map((p) => (
             <div
               key={p.title}
-              className={`rounded-xl p-6 text-left border group transition-all hover:shadow-md hover:bg-primary hover:text-white hover:border-primary hover:cursor-pointer ${p.highlighted
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-background border-border"
-                }`}
+              className={`rounded-xl p-6 text-left border group transition-all hover:shadow-md hover:bg-primary hover:text-white hover:border-primary hover:cursor-pointer ${
+                p.highlighted
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-background border-border"
+              }`}
             >
               <h3 className="font-heading font-semibold text-lg mb-2">
                 {p.title}

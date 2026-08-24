@@ -76,7 +76,7 @@ const CodixAcademy = () => {
       />
 
       <section
-        className=" text-center h-screen"
+        className="relative flex justify-center items-center text-center min-h-[75vh] md:min-h-[100vh]"
         style={{
           backgroundImage: `url(${CodixAcademyHero})`,
           backgroundSize: "cover",
@@ -85,11 +85,12 @@ const CodixAcademy = () => {
           marginBottom: "80px",
         }}
       >
-        <div className="bg-black opacity-70 w-full h-full py-16 md:py-24 flex flex-col justify-center items-center text-white">
-          <SectionTag variant="dark">
-            Professional Training Programme
-          </SectionTag>
-          <h1 className="text-4xl md:text-5xl font-heading font-bold mt-4">
+        <div className=" text-white text-center h-full flex flex-col justify-center">
+          <div className="bg-black absolute inset-0 opacity-50 z-10"></div>
+          <p className="bg-black w-fit relative z-20 mx-auto px-4 py-1 shadow-lg rounded-full text-white opacity-80 border border-white text-xs font-bold">
+            PROFESSIONAL TRAINING AND PROGRAMME
+          </p>
+          <h1 className="text-4xl md:text-5xl relative z-20 font-heading font-bold mt-4">
             Codix Academy
           </h1>
         </div>

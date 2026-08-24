@@ -3,7 +3,7 @@ import emailjs from "@emailjs/browser";
 import { Phone, Mail, MapPin } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
 import contactHero from "../assets/contactHero.webp";
-import { SEO } from '../components/SEO'
+import { SEO } from "../components/SEO";
 
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -76,8 +76,9 @@ const Contact = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="bg-black opacity-70 py-16 md:py-24 h-full w-full flex flex-col justify-center text-white">
-          <h1 className="text-4xl md:text-6xl font-heading font-bold">
+        <div className="relative py-16 md:py-24 h-full w-full flex flex-col justify-center text-white">
+          <div className="bg-black absolute top-0 left-0 h-full w-full opacity-50 z-10"></div>
+          <h1 className="text-4xl md:text-6xl relative opacity-100 font-heading font-bold z-20">
             Contact Us
           </h1>
         </div>

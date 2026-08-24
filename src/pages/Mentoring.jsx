@@ -11,7 +11,7 @@ const Mentoring = () => (
       image={mentorHero}
     />
     <section
-      className="text-center h-screen mb-20"
+      className="relative flex justify-center items-center text-center min-h-[75vh] md:min-h-[100vh] mb-20"
       style={{
         backgroundImage: `url(${mentorHero})`,
         backgroundSize: "cover",
@@ -19,8 +19,9 @@ const Mentoring = () => (
         backgroundPosition: "center",
       }}
     >
-      <div className="bg-black opacity-70 py-16 md:py-24 h-full w-full flex flex-col justify-center text-white">
-        <h1 className="text-4xl md:text-6xl font-heading font-bold">
+      <div className=" text-white text-center h-full flex flex-col justify-center">
+        <div className="bg-black absolute inset-0 opacity-50 z-10"></div>
+        <h1 className="text-4xl md:text-6xl font-heading font-bold relative z-20">
           CCF Mentorship Programme
         </h1>
       </div>
