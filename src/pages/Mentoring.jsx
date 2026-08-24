@@ -20,7 +20,7 @@ const Mentoring = () => (
       }}
     >
       <div className=" text-white text-center h-full flex flex-col justify-center">
-        <div className="bg-black absolute inset-0 opacity-50 z-10"></div>
+        <div className="bg-black absolute inset-0 opacity-35 z-10"></div>
         <h1 className="text-4xl md:text-6xl font-heading font-bold relative z-20">
           CCF Mentorship Programme
         </h1>

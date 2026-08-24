@@ -86,7 +86,7 @@ const CodixAcademy = () => {
         }}
       >
         <div className=" text-white text-center h-full flex flex-col justify-center">
-          <div className="bg-black absolute inset-0 opacity-50 z-10"></div>
+          <div className="bg-black absolute inset-0 opacity-35 z-10"></div>
           <p className="bg-black w-fit relative z-20 mx-auto px-4 py-1 shadow-lg rounded-full text-white opacity-80 border border-white text-xs font-bold">
             PROFESSIONAL TRAINING AND PROGRAMME
           </p>
