@@ -4,6 +4,11 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
+const REQUIRED_DOCUMENTS = {
+  applicationLetter: "Application Letter",
+  feeBreakdown: "School Fee Breakdown",
+};
+
 const formatValue = (value) => {
   if (value === null || value === undefined || value === "") return "—";
   if (typeof value === "boolean") return value ? "Yes" : "No";
@@ -11,9 +16,9 @@ const formatValue = (value) => {
   return String(value);
 };
 
-const buildEmailHtml = (formData) => {
+const buildEmailHtml = (formData, documents) => {
   const rows = Object.entries(formData)
-    .filter(([key]) => key !== "resume" && key !== "filename")
+    .filter(([key]) => key !== "attachments")
     .map(
       ([key, value]) =>
         `<li><strong>${key}:</strong> ${formatValue(value)}</li>`,
@@ -25,6 +30,12 @@ const buildEmailHtml = (formData) => {
       <h2 style="margin-bottom: 12px;">New Scholarship Application</h2>
       <p>A new application was submitted from the scholarship form.</p>
       <ul style="padding-left: 20px;">${rows}</ul>
+      <h3 style="margin-top: 20px;">Documents attached</h3>
+      <ul style="padding-left: 20px;">${
+        documents.length
+          ? documents.map((d) => `<li>${d.label}: ${d.filename}</li>`).join("")
+          : "<li>None</li>"
+      }</ul>
     </div>
   `;
 };
@@ -48,28 +59,40 @@ export default async function handler(req, res) {
     const formData = req.body ?? {};
     const { firstName, lastName } = formData;
 
-    const resumeBase64 = formData.resume;
-    const resumeName = formData.filename;
+    const documents = (
+      Array.isArray(formData.attachments) ? formData.attachments : []
+    ).filter((d) => d && d.content && d.filename);
 
-    const attachments = [];
-    if (resumeBase64 && resumeName) {
-      const base64Content = resumeBase64.includes("base64,")
-        ? resumeBase64.split("base64,")[1]
-        : resumeBase64;
+    const missing = Object.entries(REQUIRED_DOCUMENTS)
+      .filter(([field]) => !documents.some((d) => d.field === field))
+      .map(([, label]) => label);
 
-      attachments.push({
-        filename: resumeName,
-        content: Buffer.from(base64Content, "base64"),
-        contentType: "application/pdf",
+    if (missing.length) {
+      return res.status(400).json({
+        success: false,
+        message: `Missing required document(s): ${missing.join(", ")}.`,
       });
     }
+
+    const attachments = documents.map((d) => {
+      const base64Content = d.content.includes("base64,")
+        ? d.content.split("base64,")[1]
+        : d.content;
+
+      return {
+        // Prefix with the document type so the files are easy to tell apart in the inbox.
+        filename: `${d.label || d.field} - ${d.filename}`,
+        content: Buffer.from(base64Content, "base64"),
+        contentType: "application/pdf",
+      };
+    });
 
     await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "info@codixcharityfoundation.org",
       to: process.env.RESEND_TO_EMAIL || "info@codixcharityfoundation.org",
       subject:
         `Scholarship Form: ${firstName || "Applicant"} ${lastName || ""}`.trim(),
-      html: buildEmailHtml(formData),
+      html: buildEmailHtml(formData, documents),
       attachments,
     });
 

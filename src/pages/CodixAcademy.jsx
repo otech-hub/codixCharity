@@ -13,6 +13,7 @@ import Precious from "../assets/Precious.jpg";
 import kasarachi from "../assets/kasarachiTestimonial.jpg";
 import heroImage4 from "../assets/heroImage4.jpg";
 import CodixAcademyHero from "../assets/codixAcademyHero.webp";
+import { ImageGalaryView } from "@/components/imageGalaryView";
 import { SEO } from "@/components/SEO";
 
 const timeline = [
@@ -84,6 +85,7 @@ const CodixAcademy = () => {
           backgroundPosition: "center",
           marginBottom: "80px",
         }}
+        id="hero"
       >
         <div className=" text-white text-center h-full flex flex-col justify-center">
           <div className="bg-black absolute inset-0 opacity-35 z-10"></div>
@@ -207,38 +209,7 @@ const CodixAcademy = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {OurColalborationImage.length > 0 &&
-              OurColalborationImage.slice(0, 6).map((img, index) => (
-                <div
-                  key={index}
-                  className="rounded-3xl overflow-hidden border border-slate-700 shadow-xl shadow-slate-950/40"
-                >
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    className="w-full h-[268px] object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            <div className="col-span-3 flex justify-center gap-4">
-              {OurColalborationImage.length > 0 &&
-                OurColalborationImage.slice(6).map((img, index) => (
-                  <div
-                    key={index}
-                    className="rounded-3xl overflow-hidden border border-slate-700 shadow-xl shadow-slate-950/40 w-[30%]"
-                  >
-                    <img
-                      src={img.src}
-                      alt={img.alt}
-                      className="w-full h-[268px] object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                ))}
-            </div>
-          </div>
+          <ImageGalaryView images={OurColalborationImage} />
         </div>
       </section>
 

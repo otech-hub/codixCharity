@@ -25,7 +25,7 @@ export const convertToBase = (file) => {
     const normalizedFile = normalizeTranscriptFile(file);
 
     if (!normalizedFile) {
-      reject(new Error("Please upload a valid academic transcript PDF."));
+      reject(new Error("Please upload a valid PDF document."));
       return;
     }
 

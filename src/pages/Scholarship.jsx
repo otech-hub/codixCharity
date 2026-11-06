@@ -5,7 +5,7 @@ import { scholarshipSchema, STEP_FIELDS } from "@/schemas/scholarshipSchema";
 import { Upload, Check } from "lucide-react";
 import SectionTag from "@/components/SectionTag";
 import { convertToBase } from "@/lib/convertBase";
-import { SEO } from '../components/SEO'
+import { SEO } from "../components/SEO";
 
 const STEPS = [
   { id: 1, label: "Personal" },
@@ -14,6 +14,20 @@ const STEPS = [
   { id: 4, label: "Leadership" },
   { id: 5, label: "Declaration" },
 ];
+
+// Document uploads (PDF only). `step` is where the field appears in the form.
+const DOCUMENTS = {
+  transcript: { label: "Most recent Academic Transcript", required: false, step: 2 },
+  admissionLetter: { label: "Admission Letter", required: false, step: 2 },
+  applicationLetter: { label: "Application Letter", required: true, step: 3 },
+  feeBreakdown: { label: "School Fee Breakdown", required: true, step: 3 },
+};
+
+// Vercel caps request bodies at 4.5MB and base64 adds ~33%, so keep files under 3MB total.
+const MAX_TOTAL_BYTES = 3 * 1024 * 1024;
+
+const docsForStep = (step) =>
+  Object.keys(DOCUMENTS).filter((key) => DOCUMENTS[key].step === step);
 
 const NIGERIAN_STATES = [
   "Abia",
@@ -60,9 +74,8 @@ const Scholarship = () => {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState(null);
-  const [resume, setResume] = useState(null);
-  const [resumeName, setResumeName] = useState("");
-  const [resumeError, setResumeError] = useState("");
+  const [files, setFiles] = useState({});
+  const [fileErrors, setFileErrors] = useState({});
 
   const {
     register,
@@ -89,8 +102,6 @@ const Scholarship = () => {
       yearLevel: "",
       matric: "",
       cgpa: "",
-      fileName: "",
-      resume: null,
       financialNeed: "",
       appliedOther: "",
       personalStatement: "",
@@ -114,20 +125,37 @@ const Scholarship = () => {
 
   const firstName = watch("firstName");
 
+  // Sets an error on every required document in `keys` that hasn't been uploaded.
+  const validateDocs = (keys) => {
+    const missing = {};
+    keys.forEach((key) => {
+      if (DOCUMENTS[key].required && !files[key]) {
+        missing[key] = `Please upload your ${DOCUMENTS[key].label.toLowerCase()}.`;
+      }
+    });
+    setFileErrors((prev) => ({ ...prev, ...missing }));
+    return Object.keys(missing).length === 0;
+  };
+
   const next = async () => {
-    const valid = await trigger(STEP_FIELDS[step]);
-    if (valid) setStep((s) => Math.min(5, s + 1));
+    const fieldsValid = await trigger(STEP_FIELDS[step]);
+    const docsValid = validateDocs(docsForStep(step));
+    if (fieldsValid && docsValid) setStep((s) => Math.min(5, s + 1));
   };
 
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
-  const handleTranscriptUpload = (event) => {
+  const handleFileUpload = (key) => (event) => {
     const file = event.target.files?.[0];
 
     if (!file) {
-      setResume(null);
-      setResumeName("");
-      setResumeError("Please upload your academic transcript.");
+      setFiles((prev) => ({ ...prev, [key]: null }));
+      setFileErrors((prev) => ({
+        ...prev,
+        [key]: DOCUMENTS[key].required
+          ? `Please upload your ${DOCUMENTS[key].label.toLowerCase()}.`
+          : "",
+      }));
       return;
     }
 
@@ -135,15 +163,13 @@ const Scholarship = () => {
       file.type !== "application/pdf" &&
       !file.name.toLowerCase().endsWith(".pdf")
     ) {
-      setResume(null);
-      setResumeName("");
-      setResumeError("Please upload a PDF document.");
+      setFiles((prev) => ({ ...prev, [key]: null }));
+      setFileErrors((prev) => ({ ...prev, [key]: "Please upload a PDF document." }));
       return;
     }
 
-    setResume(file);
-    setResumeName(file.name);
-    setResumeError("");
+    setFiles((prev) => ({ ...prev, [key]: file }));
+    setFileErrors((prev) => ({ ...prev, [key]: "" }));
   };
 
   const onSubmit = async (data) => {
@@ -151,19 +177,30 @@ const Scholarship = () => {
     setSendError(null);
 
     try {
-      if (!resume) {
-        setResumeError("Please upload your academic transcript.");
+      if (!validateDocs(Object.keys(DOCUMENTS))) {
         throw new Error(
-          "Please upload your academic transcript before submitting.",
+          "Please upload your application letter and school fee breakdown before submitting.",
         );
       }
 
-      const resumeConvert = await convertToBase(resume);
-      const payload = {
-        ...data,
-        resume: resumeConvert,
-        filename: resume.name,
-      };
+      const uploaded = Object.keys(DOCUMENTS).filter((key) => files[key]);
+      const totalBytes = uploaded.reduce((sum, key) => sum + files[key].size, 0);
+      if (totalBytes > MAX_TOTAL_BYTES) {
+        throw new Error(
+          "Your documents are too large. Please keep all uploads under 3MB in total.",
+        );
+      }
+
+      const attachments = await Promise.all(
+        uploaded.map(async (key) => ({
+          field: key,
+          label: DOCUMENTS[key].label,
+          filename: files[key].name,
+          content: await convertToBase(files[key]),
+        })),
+      );
+
+      const payload = { ...data, attachments };
 
       const response = await fetch("/api/email", {
         method: "POST",
@@ -191,7 +228,7 @@ const Scholarship = () => {
       console.error("Resend error:", err);
       setSendError(
         err.message ||
-        "Submission failed. Please try again or contact us directly.",
+          "Submission failed. Please try again or contact us directly.",
       );
     } finally {
       setSending(false);
@@ -207,6 +244,35 @@ const Scholarship = () => {
     e(field) ? (
       <p className="text-xs text-red-500 mt-1">{e(field).message}</p>
     ) : null;
+
+  // Called as a function (not <Component />) so the file input isn't remounted on every render.
+  const renderUpload = (key) => {
+    const { label, required } = DOCUMENTS[key];
+    const error = fileErrors[key];
+    return (
+      <div key={key}>
+        <label className={labelCls}>
+          {label}
+          {required ? "*" : " (optional)"}
+        </label>
+        <label
+          className={`border-2 border-dashed rounded-md p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${error ? "border-red-400" : "border-border hover:border-primary"}`}
+        >
+          <Upload className="text-muted-foreground mb-2" size={24} />
+          <span className="text-sm text-muted-foreground">
+            {files[key]?.name || "Click to upload (PDF)"}
+          </span>
+          <input
+            type="file"
+            name={key}
+            accept=".pdf"
+            onChange={handleFileUpload(key)}
+          />
+        </label>
+        {error ? <p className="text-xs text-red-500 mt-1">{error}</p> : null}
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -256,12 +322,13 @@ const Scholarship = () => {
                   className="flex flex-col items-center gap-2 flex-1"
                 >
                   <div
-                    className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${step > s.id
-                      ? "bg-primary text-primary-foreground"
-                      : step === s.id
-                        ? "bg-primary text-primary-foreground ring-4 ring-primary/20"
-                        : "bg-border text-muted-foreground"
-                      }`}
+                    className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+                      step > s.id
+                        ? "bg-primary text-primary-foreground"
+                        : step === s.id
+                          ? "bg-primary text-primary-foreground ring-4 ring-primary/20"
+                          : "bg-border text-muted-foreground"
+                    }`}
                   >
                     {step > s.id ? <Check size={14} /> : s.id}
                   </div>
@@ -470,31 +537,7 @@ const Scholarship = () => {
                       <Err field="cgpa" />
                     </div>
                   </div>
-                  <div>
-                    <label className={labelCls}>
-                      Upload most recent Academic Transcript*
-                    </label>
-                    <label
-                      className={`border-2 border-dashed rounded-md p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${resumeError ? "border-red-400" : "border-border hover:border-primary"}`}
-                    >
-                      <Upload
-                        className="text-muted-foreground mb-2"
-                        size={24}
-                      />
-                      <span className="text-sm text-muted-foreground">
-                        {resumeName || "Click to upload"}
-                      </span>
-                      <input
-                        type="file"
-                        name="resume"
-                        accept=".pdf"
-                        onChange={handleTranscriptUpload}
-                      />
-                    </label>
-                    {resumeError ? (
-                      <p className="text-xs text-red-500 mt-1">{resumeError}</p>
-                    ) : null}
-                  </div>
+                  {docsForStep(2).map(renderUpload)}
                 </div>
               )}
 
@@ -556,6 +599,7 @@ const Scholarship = () => {
                     />
                     <Err field="personalStatement" />
                   </div>
+                  {docsForStep(3).map(renderUpload)}
                 </div>
               )}
 
