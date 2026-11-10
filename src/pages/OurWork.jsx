@@ -106,7 +106,7 @@ const OurWorkImages = [
   { src: Image3, alt: "our work Image 3" },
   { src: Image4, alt: "our work Image 4" },
   { src: Image5, alt: "our work Image 5" },
-  { src: Image6, alt: "our work Image 6" },
+  // { src: Image6, alt: "our work Image 6" },
   { src: Image7, alt: "our work Image 7" },
   { src: Image8, alt: "our work Image 8" },
   { src: Image9, alt: "our work Image 9" },
@@ -254,7 +254,10 @@ const OurWork = () => {
             </div>
           ))}
         </div>
-        <div className="my-12">
+        <div className="my-24">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-12">
+            Some of Our Work in Pictures
+          </h2>
           <ImageGalaryView images={OurWorkImages} />
         </div>
       </section>
