@@ -132,3 +132,8 @@ Configure the required environment variables in your Vercel project settings to 
 
 - UI/UX design and website flow: UI/UX design collaborator.
 - Brand identity, content, and project direction: Codix Charity Foundation.
+
+## Author
+
+Ayomiposi George
+https://github.com/Ayomiposy/
